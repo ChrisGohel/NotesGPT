@@ -2,6 +2,7 @@ import Note from "@/components/Note";
 import prisma from "@/lib/db/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "NotesGPT - Notes",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default async function NotesPage() {
   const { userId } = auth();
 
-  if (!userId) throw Error("userId undefined");
+  if (!userId) redirect("/sign-in");
 
   const allNotes = await prisma.note.findMany({ where: { userId } });
 
